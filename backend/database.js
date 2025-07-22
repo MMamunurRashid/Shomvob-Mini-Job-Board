@@ -15,5 +15,31 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
+// Seed initial data (only run in development or on first setup)
+// if (process.env.NODE_ENV !== 'production') {
+//   const Job = require('./src/models/Job');
+//   db.once('open', async () => {
+//     try {
+//       await Job.deleteMany({});
+//       await Job.insertMany([
+//         {
+//           title: 'Software Engineer',
+//           company: 'Tech Corp',
+//           location: 'Remote',
+//           description: 'Develop and maintain web applications.',
+//         },
+//         {
+//           title: 'Product Manager',
+//           company: 'Innovate Inc',
+//           location: 'San Francisco, CA',
+//           description: 'Lead product development teams.',
+//         },
+//       ]);
+//       console.log('Initial jobs seeded');
+//     } catch (err) {
+//       console.error('Error seeding data:', err);
+//     }
+//   });
+// }
 
 module.exports = mongoose;

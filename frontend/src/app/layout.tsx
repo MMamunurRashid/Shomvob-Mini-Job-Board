@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen bg-gray-100">
         
           <header className="bg-blue-600 text-white p-4">
-            <Link className="text-2xl font-bold">Job Board</Link>
+            <Link href="/" className="text-2xl font-bold">Job Board</Link>
           </header>
           <main className="container mx-auto p-4">{children}</main>
         
