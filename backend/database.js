@@ -18,28 +18,58 @@ db.once('open', () => {
 // Seed initial data (only run in development or on first setup)
 // if (process.env.NODE_ENV !== 'production') {
 //   const Job = require('./src/models/Job');
+
+//   // Helper to get date string N days from now
+//   const getFutureDate = (daysFromNow) => {
+//     const date = new Date();
+//     date.setDate(date.getDate() + daysFromNow);
+//     return date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+//   };
+
 //   db.once('open', async () => {
 //     try {
 //       await Job.deleteMany({});
 //       await Job.insertMany([
 //         {
-//           title: 'Software Engineer',
-//           company: 'Tech Corp',
+//           title: 'Frontend Developer',
+//           companyName: 'PixelWave',
+//           companyDetails: 'Creative design agency specializing in UI/UX solutions.',
+//           location: 'Dhaka, Bangladesh',
+//           salary: '50,000 BDT/month',
+//           jobType: 'Onsite',
+//           experience: '1+ years',
+//           description: 'Looking for a React developer to join our creative team.',
+//           deadline: getFutureDate(15),
+//         },
+//         {
+//           title: 'Backend Developer (Node.js)',
+//           companyName: 'CodeNest Ltd.',
+//           companyDetails: 'Tech company focusing on scalable cloud applications.',
 //           location: 'Remote',
-//           description: 'Develop and maintain web applications.',
+//           salary: '70,000 BDT/month',
+//           jobType: 'Remote',
+//           experience: '2+ years',
+//           description: 'Responsible for REST API development and DB design.',
+//           deadline: getFutureDate(20),
 //         },
 //         {
 //           title: 'Product Manager',
-//           company: 'Innovate Inc',
-//           location: 'San Francisco, CA',
-//           description: 'Lead product development teams.',
+//           companyName: 'InnovaTech',
+//           companyDetails: 'Product-focused startup in fintech sector.',
+//           location: 'Hybrid - Dhaka & Remote',
+//           salary: '1,20,000 BDT/month',
+//           jobType: 'Hybrid',
+//           experience: '3+ years',
+//           description: 'Lead the product lifecycle from concept to launch.',
+//           deadline: getFutureDate(10),
 //         },
 //       ]);
-//       console.log('Initial jobs seeded');
+//       console.log('✅ Initial jobs seeded');
 //     } catch (err) {
-//       console.error('Error seeding data:', err);
+//       console.error('❌ Error seeding data:', err);
 //     }
 //   });
 // }
+
 
 module.exports = mongoose;

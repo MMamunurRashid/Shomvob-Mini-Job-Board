@@ -41,6 +41,8 @@ router.post('/', auth, async (req, res) => {
     await job.save();
     res.status(201).json({ id: job._id });
   } catch (err) {
+    console.log('Job creation error:', err);
+    
     res.status(500).json({ error: 'Server error' });
   }
 });

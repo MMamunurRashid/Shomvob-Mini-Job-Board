@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import JobDetails from '../../../components/JobDetails';
 import { JobInterface } from '../../../types';
+import Loader from '@/components/Loader';
 
 export default function Job({ params }: { params: { id: string } }) {
   const [job, setJob] = useState<JobInterface | null>(null);
@@ -45,12 +46,24 @@ export default function Job({ params }: { params: { id: string } }) {
   }, [params.id, router]);
 
   if (loading) {
-    return <p className="text-gray-500">Loading...</p>;
+    return <Loader />;
   }
 
   if (error) {
-    return <p className="text-red-600">{error}</p>;
+    return (
+      <p className="text-red-600 text-center mt-8">
+        {error || 'Something went wrong. Please try again later.'}
+      </p>
+    );
   }
 
-  return job ? <JobDetails job={job} /> : null;
+  if (!job) {
+    return (
+      <p className="text-gray-500 text-center mt-8">
+        Job not found or unavailable.
+      </p>
+    );
+  }
+
+  return <JobDetails job={job} />;
 }

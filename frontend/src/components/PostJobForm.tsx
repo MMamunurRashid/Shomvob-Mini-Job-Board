@@ -5,18 +5,26 @@ import { useAuth } from '../context/AuthContext';
 import { JobInterface } from '../types';
 
 export default function PostJobForm() {
-  const [formData, setFormData] = useState<Omit<JobInterface, '_id'>>({
+  const [formData, setFormData] = useState<Omit<JobInterface, '_id' | 'createdAt'>>({
     title: '',
-    company: '',
+    companyName: '',
+    companyDetails: '',
     location: '',
+    salary: '',
+    jobType: 'Onsite',
+    experience: '',
+    deadline: '',
     description: '',
   });
+
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const router = useRouter();
   const { token } = useAuth();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -42,7 +50,7 @@ export default function PostJobForm() {
       setSuccess(true);
       setTimeout(() => {
         router.push('/');
-      }, 2000); // Redirect to home after 2 seconds
+      }, 2000);
     } catch (err) {
       setError('Failed to post job. Please try again.');
     }
@@ -56,6 +64,7 @@ export default function PostJobForm() {
         </div>
       )}
       {error && <p className="text-red-600 mb-4">{error}</p>}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-gray-700">Job Title</label>
@@ -68,17 +77,29 @@ export default function PostJobForm() {
             required
           />
         </div>
+
         <div>
-          <label className="block text-gray-700">Company</label>
+          <label className="block text-gray-700">Company Name</label>
           <input
             type="text"
-            name="company"
-            value={formData.company}
+            name="companyName"
+            value={formData.companyName}
             onChange={handleChange}
             className="w-full p-2 border rounded"
             required
           />
         </div>
+
+        <div>
+          <label className="block text-gray-700">Company Details</label>
+          <textarea
+            name="companyDetails"
+            value={formData.companyDetails}
+            onChange={handleChange}
+            className="w-full p-2 border rounded h-[200px]"
+          ></textarea>
+        </div>
+
         <div>
           <label className="block text-gray-700">Location</label>
           <input
@@ -90,16 +111,70 @@ export default function PostJobForm() {
             required
           />
         </div>
+
+        <div>
+          <label className="block text-gray-700">Salary</label>
+          <input
+            type="text"
+            name="salary"
+            value={formData.salary}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-gray-700">Experience</label>
+          <input
+            type="text"
+            name="experience"
+            value={formData.experience}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+        <div>
+          <label className="block text-gray-700">Job Type</label>
+          <select
+            name="jobType"
+            value={formData.jobType}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          >
+            <option value="Remote">Remote</option>
+            <option value="Onsite">Onsite</option>
+            <option value="Hybrid">Hybrid</option>
+          </select>
+        </div>
+
         <div>
           <label className="block text-gray-700">Description</label>
           <textarea
             name="description"
             value={formData.description}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded h-[200px]"
             required
           ></textarea>
         </div>
+
+        <div>
+          <label className="block text-gray-700 mb-1">Application Deadline</label>
+          <input
+            type="date"
+            name="deadline"
+            value={formData.deadline}
+            onChange={(e) =>
+              setFormData({ ...formData, deadline: e.target.value })
+            }
+            className="w-full border p-2 rounded"
+            required
+          />
+        </div>
+
+
         <button
           type="submit"
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
