@@ -5,12 +5,17 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "jest --detectOpenHandles --forceExit"
+    "test": "jest --detectOpenHandles --forceExit",
+    "lint": "eslint ."
   },
   "jest": {
     "testEnvironment": "node",
-    "setupFilesAfterEnv": ["./__tests__/setup.js"],
-    "testPathIgnorePatterns": ["/__tests__/setup.js"]
+    "setupFilesAfterEnv": [
+      "./__tests__/setup.js"
+    ],
+    "testPathIgnorePatterns": [
+      "/__tests__/setup.js"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -27,6 +32,8 @@
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^4.3.2",
+    "eslint": "^9.31.0",
+    "globals": "^16.3.0",
     "jest": "^30.0.5",
     "mongodb-memory-server": "^10.1.4",
     "sinon": "^21.0.0",
