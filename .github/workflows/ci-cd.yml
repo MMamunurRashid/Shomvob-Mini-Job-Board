@@ -1,0 +1,83 @@
+name: Shomvob CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    name: Lint and Test All Apps
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      # Lint + test backend
+      - name: Install Backend Deps
+        working-directory: ./backend
+        run: npm install
+
+      - name: Lint Backend
+        working-directory: ./backend
+        run: npm run lint
+
+      - name: Test Backend
+        working-directory: ./backend
+        run: npm test
+
+      # Lint + test frontend
+      - name: Install Frontend Deps
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Lint Frontend
+        working-directory: ./frontend
+        run: npm run lint
+
+      - name: Test Frontend
+        working-directory: ./frontend
+        run: npm test
+
+  deploy-frontend:
+    name: Deploy to Vercel
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Vercel Deploy
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./frontend
+          scope: ${{ secrets.VERCEL_ORG_ID }}
+
+  deploy-backend:
+    name: Deploy to Railway
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy via Railway CLI
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1 # Needed only to install Railway CLI with RubyGems
+      - name: Install Railway CLI
+        run: npm install -g railway
+
+      - name: Railway Deploy
+        run: railway up --service backend --cwd backend
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

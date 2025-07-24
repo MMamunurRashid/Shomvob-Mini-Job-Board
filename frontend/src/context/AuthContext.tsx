@@ -21,6 +21,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(data.token);
       localStorage.setItem('token', data.token);
     } catch (err) {
+      console.error(err);
       throw new Error('Login failed');
     }
   };
