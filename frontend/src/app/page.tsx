@@ -20,6 +20,7 @@ export default function Home() {
         const data: JobInterface[] = await response.json();
         setJobs(data);
       } catch (err) {
+        console.error(err);
         setError('Failed to load jobs');
       } finally {
         setLoading(false);

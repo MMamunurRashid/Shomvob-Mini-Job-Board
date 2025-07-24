@@ -4,8 +4,11 @@ import { useRouter } from 'next/navigation';
 import JobDetails from '../../../components/JobDetails';
 import { JobInterface } from '../../../types';
 import Loader from '@/components/Loader';
+interface Props {
+  params: Promise<{ id: string }>;
+}
 
-export default function Job({ params }: { params: { id: string } }) {
+export default function Job({ params }: Props) {
   const [job, setJob] = useState<JobInterface | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -13,8 +16,9 @@ export default function Job({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     const fetchJob = async () => {
+      const { id } = await params; 
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jobs/${params.id}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jobs/${id}`);
 
         if (!response.ok) {
           if (response.status === 404) {
@@ -37,13 +41,14 @@ export default function Job({ params }: { params: { id: string } }) {
         setJob(data);
       } catch (err) {
         setError('Failed to load job details');
+        console.log(err);        
       } finally {
         setLoading(false);
       }
     };
 
     fetchJob();
-  }, [params.id, router]);
+  }, [params, router]);
 
   if (loading) {
     return <Loader />;

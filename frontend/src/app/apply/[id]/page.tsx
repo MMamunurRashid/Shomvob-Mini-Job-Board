@@ -1,25 +1,29 @@
+// app/apply/[id]/page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
-import ApplyForm from '../../../components/ApplyForm';
-import { JobInterface } from '../../../types';
+import ApplyForm from '@/components/ApplyForm';
+import { JobInterface } from '@/types';
 import Loader from '@/components/Loader';
 
-export default function Apply({ params }: { params: { id: string } }) {
+interface Props {
+  params: Promise<{ id: string }>;
+}
+
+export default function Apply({ params }: Props) {
   const [job, setJob] = useState<JobInterface | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
+  
   useEffect(() => {
     const fetchJob = async () => {
+      const { id } = await params; 
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jobs/${params.id}`);
-        if (!res.ok) {
-          throw new Error('Failed to fetch job details');
-        }
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jobs/${id}`);
+        if (!res.ok) throw new Error('Failed to fetch job details');
         const data = await res.json();
         setJob(data);
-      } catch (err) {
+      } catch {
         setError('Error loading job');
       } finally {
         setLoading(false);
@@ -27,9 +31,9 @@ export default function Apply({ params }: { params: { id: string } }) {
     };
 
     fetchJob();
-  }, [params.id]);
+  }, [params]);
 
-  if (loading) return <Loader/>;
+  if (loading) return <Loader />;
   if (error || !job) return <p className="text-red-600">{error || 'Job not found'}</p>;
 
   return <ApplyForm jobId={job._id} jobTitle={job.title} />;

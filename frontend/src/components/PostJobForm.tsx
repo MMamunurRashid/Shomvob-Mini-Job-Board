@@ -52,6 +52,7 @@ export default function PostJobForm() {
         router.push('/');
       }, 2000);
     } catch (err) {
+      console.error(err);
       setError('Failed to post job. Please try again.');
     }
   };

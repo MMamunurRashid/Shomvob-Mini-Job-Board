@@ -26,6 +26,8 @@ export default function ApplicationsPage() {
         const data = await res.json();
         setApplications(data);
       } catch (err) {
+        console.log(err);
+        
         setError('Failed to load applications');
       } finally {
         setLoading(false);

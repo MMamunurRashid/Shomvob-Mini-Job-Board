@@ -45,10 +45,14 @@ export default function ApplyForm({ jobId, jobTitle }: ApplyFormProps) {
 
       if (response.ok) {
         setSubmitted(true);
+        setTimeout(() => {
+          router.push('/'); 
+        }, 2000);
       } else {
         setError('Failed to submit application.');
       }
     } catch (err) {
+      console.error(err);
       setError('An error occurred. Please try again.');
     } finally {
       setSubmitting(false);

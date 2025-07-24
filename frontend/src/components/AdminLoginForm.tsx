@@ -17,6 +17,7 @@ export default function AdminLoginForm() {
       await login(username, password);
       router.push('/admin/post-job');
     } catch (err) {
+      console.error(err);
       setError('Invalid username or password');
     }
   };
