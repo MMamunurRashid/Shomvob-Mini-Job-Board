@@ -17,16 +17,18 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
 
-      # Lint + test backend
+      # 👉 BACKEND
       - name: Install Backend Deps
         working-directory: ./backend
-        run: npm install
+        run: npm ci
 
       - name: Lint Backend
         working-directory: ./backend
@@ -36,10 +38,10 @@ jobs:
         working-directory: ./backend
         run: npm test
 
-      # Lint + test frontend
+      # 👉 FRONTEND
       - name: Install Frontend Deps
         working-directory: ./frontend
-        run: npm install
+        run: npm ci
 
       - name: Lint Frontend
         working-directory: ./frontend
